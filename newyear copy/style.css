@@ -1,0 +1,14 @@
+.message {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  height: auto;
+  border: 1px solid red;
+  padding: 5px;
+}
+
+p {
+  display: flex;
+  margin: 2px;
+  color: #5f0dab;
+}
