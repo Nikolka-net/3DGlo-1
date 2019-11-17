@@ -49,6 +49,6 @@ window.addEventListener('DOMContentLoaded', function () {//загрузка то
   }
 
   //countTimer('17 november 2019 15:32');
-  let idInterval = setInterval(countTimer, 1000, '17 november 2019 16:10');//обновление через 1000мс
+  let idInterval = setInterval(countTimer, 1000, '1 january 2020');//обновление через 1000мс
 
 });
