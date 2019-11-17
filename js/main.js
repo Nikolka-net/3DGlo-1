@@ -21,7 +21,6 @@ window.addEventListener('DOMContentLoaded', function () {//загрузка то
         minutes = addZero(Math.floor((timeRemaining / 60) % 60)),//получаем минуты
         hours = addZero(Math.floor(timeRemaining / 60 / 60) % 24),//получаем часы
         days = addZero(Math.floor(timeRemaining / 60 / 60 / 24));//получаем дни
-
       return {//возвращение в виде объекта
         timeRemaining, days, hours, minutes, seconds
       };
@@ -42,14 +41,14 @@ window.addEventListener('DOMContentLoaded', function () {//загрузка то
         timerHours.textContent = '00';
         timerMinutes.textContent = '00';
         timerSeconds.textContent = '00';
+        clearInterval(idInterval);
       }
     }
     updateClock();
 
   }
 
-  countTimer('01 february 2020');
-  // setInterval(countTimer, 1000, '01 february 2020');//обновление через 1000мс
-  // console.log('countTimer: ', countTimer);
+  //countTimer('17 november 2019 15:32');
+  let idInterval = setInterval(countTimer, 1000, '17 november 2019 16:10');//обновление через 1000мс
 
 });
