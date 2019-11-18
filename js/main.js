@@ -79,18 +79,40 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
   const togglePopUp = () => {
     const popup = document.querySelector('.popup'),
       popupBtn = document.querySelectorAll('.popup-btn'),
-      popUpClose = document.querySelector('.popup-close');
+      popUpClose = document.querySelector('.popup-close'),
+      popupContent = document.querySelector('.popup-content');
+    let count = 0;//счётчик
+
 
     popupBtn.forEach((elem) => {
       elem.addEventListener('click', () => {
         popup.style.display = 'block';//вызываем модальное окно
+        let popupInterval;
+        const popupDown = function () {
+          popupInterval = requestAnimationFrame(popupDown);//записываем идентификатор
+          count++;
+          if (count < 100) {
+            popupContent.style.top = count + 'px';//двигаем
+            console.log('count: ', count);
+          } else {
+            cancelAnimationFrame(popupInterval);//конец работы счётчика
+          }
+        };
+        const width = document.documentElement.clientWidth;
+        console.log('width: ', width);
+
+        if (width >= 768) {//если ширина экрана >= 768px
+          popupInterval = requestAnimationFrame(popupDown);//запуск при клике на кнопку
+        }
       });
     });
     popUpClose.addEventListener('click', () => {
       popup.style.display = 'none';//закрываем модальное окно
+      count = 0;//обнуляем счётчик
     });
 
   };
   togglePopUp();
 
 });
+
