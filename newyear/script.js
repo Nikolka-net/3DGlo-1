@@ -4,18 +4,12 @@ window.addEventListener('DOMContentLoaded', function () {
   function countNewYear(newyear) {
 
     let elemDiv = document.querySelectorAll('.message'),
-      morning = document.createElement('p'),
-      afternoon = document.createElement('p'),
-      evening = document.createElement('p'),
-      night = document.createElement('p'),
+      interval = document.createElement('p'),
       today = document.createElement('p'),
       currentTime = document.createElement('p'),
       toNewYear = document.createElement('p');
 
-    elemDiv[0].insertBefore(morning, null);
-    elemDiv[0].insertBefore(afternoon, null);
-    elemDiv[0].insertBefore(evening, null);
-    elemDiv[0].insertBefore(night, null);
+    elemDiv[0].insertBefore(interval, null);
     elemDiv[0].insertBefore(today, null);
     elemDiv[0].insertBefore(currentTime, null);
     elemDiv[0].insertBefore(toNewYear, null);
@@ -25,13 +19,13 @@ window.addEventListener('DOMContentLoaded', function () {
 
     let timeRu = date.toLocaleTimeString('ru').substr(0, 2);
     if (timeRu >= 6 && timeRu < 12) {
-      morning.textContent = 'Доброе утро';
+      interval.textContent = 'Доброе утро';
     } else if (timeRu >= 12 && timeRu < 18) {
-      afternoon.textContent = 'Добрый день';
+      interval.textContent = 'Добрый день';
     } else if (timeRu >= 18 && timeRu < 24) {
-      evening.textContent = 'Добрый вечер';
+      interval.textContent = 'Добрый вечер';
     } else if (timeRu >= 24 && timeRu < 6) {
-      night.textContent = 'Доброй ночи';
+      interval.textContent = 'Доброй ночи';
     }
 
     let weekday = date.toLocaleString('ru', { weekday: 'long' });
