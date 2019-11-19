@@ -60,16 +60,28 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
 
     const handlerMenu = () => {
       menu.classList.toggle('active-menu');//с помощью css
+
       //альтернативный код
       /*  if (!menu.style.transform || menu.style.transform === `translate(-100%)`) {//если transform есть, оно превр. в false и отработ. else
-         menu.style.transform = `translate(0)`;
-       } else {
-         menu.style.transform = `translate(-100%)`;
-       } */
+        menu.style.transform = `translate(0)`;
+      } else {
+       menu.style.transform = `translate(-100%)`;
+      } */
+
     };
     btnMenu.addEventListener('click', handlerMenu);
-    closeBtn.addEventListener('click', handlerMenu);
-    menuItems.forEach((elem) => elem.addEventListener('click', handlerMenu));//сворачивание меню
+    menu.addEventListener('click', (event) => {
+      let target = event.target;
+
+      if (target.classList.contains('close-btn')) {//при клике на крестик м. окно исчезает
+        handlerMenu();
+      }
+      target = target.closest('ul > li');
+      if (target) {//если есть эл. li, то запуск handlerMenu()
+        handlerMenu();
+      }
+      return;
+    });
   };
 
   toggleMenu();
@@ -166,7 +178,6 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
 
   };
   tabs();
-
 
 });
 
