@@ -74,45 +74,99 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
 
   toggleMenu();
 
-  //popup
+  //Popup
 
   const togglePopUp = () => {
-    const popup = document.querySelector('.popup'),
+    const popUp = document.querySelector('.popup'),
       popupBtn = document.querySelectorAll('.popup-btn'),
-      popUpClose = document.querySelector('.popup-close'),
       popupContent = document.querySelector('.popup-content');
     let count = 0;//счётчик
 
 
     popupBtn.forEach((elem) => {
       elem.addEventListener('click', () => {
-        popup.style.display = 'block';//вызываем модальное окно
+        popUp.style.display = 'block';//вызываем модальное окно
         let popupInterval;
         const popupDown = function () {
           popupInterval = requestAnimationFrame(popupDown);//записываем идентификатор
           count++;
           if (count < 100) {
             popupContent.style.top = count + 'px';//двигаем
-            console.log('count: ', count);
           } else {
             cancelAnimationFrame(popupInterval);//конец работы счётчика
           }
         };
         const width = document.documentElement.clientWidth;
-        console.log('width: ', width);
 
         if (width >= 768) {//если ширина экрана >= 768px
           popupInterval = requestAnimationFrame(popupDown);//запуск при клике на кнопку
         }
       });
     });
-    popUpClose.addEventListener('click', () => {
-      popup.style.display = 'none';//закрываем модальное окно
-      count = 0;//обнуляем счётчик
+
+    popUp.addEventListener('click', (event) => {
+      const countPopUpNone = () => {
+        popUp.style.display = 'none';//убираем м. окно
+        count = 0;//обнуляем счётчик
+      };
+
+      let target = event.target;
+
+      if (target.classList.contains('popup-close')) {//при клике на крестик м. окно исчезает
+        countPopUpNone();
+
+      } else {
+        target = target.closest('.popup-content');
+
+        if (!target) {//если не получили popup-content, т.е. получили null при клике за пределами окна
+          countPopUpNone();
+
+        }
+      }
+
+
     });
 
   };
   togglePopUp();
+
+  //Tabs
+
+  const tabs = () => {
+    const tabHeader = document.querySelector('.service-header'),
+      tab = tabHeader.querySelectorAll('.service-header-tab'),
+      tabContent = document.querySelectorAll('.service-tab');
+
+    const toggleTabContent = (index) => {
+      for (let i = 0; i < tabContent.length; i++) {
+        if (index === i) {//если индексы совпадают, контент появляется
+          tab[i].classList.add('active');//добавл. активный класс
+          tabContent[i].classList.remove('d-none');
+        } else {//исчезает
+          tab[i].classList.remove('active');//убираем активный класс
+          tabContent[i].classList.add('d-none');
+
+        }
+      }
+    };
+
+    tabHeader.addEventListener('click', (event) => {
+      let target = event.target;//элем. на котором произошло событие
+      target = target.closest('.service-header-tab');//проверка наличия селектора, его привязка
+
+      if (target) {//есть ли у таргета что-то
+        tab.forEach((item, i) => {//перебор
+          if (item === target) {//если совп. с service-header-tab перед. индекс элемента в F.
+            toggleTabContent(i);
+          }
+        });
+      }
+    });
+
+
+  };
+  tabs();
+
 
 });
 
