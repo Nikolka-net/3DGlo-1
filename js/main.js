@@ -63,9 +63,7 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
   //Menu
   const toggleMenu = () => {
     const btnMenu = document.querySelector('.menu'),
-      menu = document.querySelector('menu'),
-      closeBtn = document.querySelector('.close-btn'),
-      menuItems = menu.querySelectorAll('ul>li');
+      menu = document.querySelector('menu');
 
     const handlerMenu = () => {
       menu.classList.toggle('active-menu');//с помощью css
@@ -81,12 +79,9 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
     btnMenu.addEventListener('click', handlerMenu);
     menu.addEventListener('click', (event) => {
       let target = event.target;
+      console.log('target: ', target);
 
-      if (target.classList.contains('close-btn')) {//при клике на крестик м. окно исчезает
-        handlerMenu();
-      }
-      target = target.closest('ul > li');
-      if (target) {//если есть эл. li, то запуск handlerMenu()
+      if (target.classList.contains('close-btn') || target.closest('ul > li')) {//при клике на крестик или пункт меню м. окно исчезает
         handlerMenu();
       }
       return;
@@ -187,6 +182,100 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
 
   };
   tabs();
+
+  //Slider
+
+  const slider = () => {
+    const slide = document.querySelectorAll('.portfolio-item'),
+      dot = document.querySelectorAll('.dot'),
+      slider = document.querySelector('.portfolio-content'),
+      dots = document.querySelectorAll('.portfolio-dots');
+
+    let currentSlide = 0;//индекс текущего слайда
+    let interval;//для идентификатора setInterval
+
+    const prevSlide = (elem, index, strClass) => {
+      elem[index].classList.remove(strClass);//удаляем active
+    };
+
+    const nextSlide = (elem, index, strClass) => {
+      elem[index].classList.add(strClass);
+    };
+
+    const autoPlaySlide = () => {//автоматическое перелистывание
+      prevSlide(slide, currentSlide, 'portfolio-item-active');//передаём значение и класс
+      prevSlide(dot, currentSlide, 'dot-active');//передаём значение и класс, чтобы менялись точки
+
+      currentSlide++;
+      if (currentSlide >= slide.length) {//начин. с начала
+        currentSlide = 0;
+      }
+      nextSlide(slide, currentSlide, 'portfolio-item-active');
+      nextSlide(dot, currentSlide, 'dot-active');
+    };
+
+    const startSlide = (time = 10000) => {//запуск слайда, по умолч. 3с
+      interval = setInterval(autoPlaySlide, time);//запуск слайда через каждые 2с
+    };
+
+    const stopSlide = () => {//остановка слайда
+      clearInterval(interval);//остановка интервала через идентификатор
+
+    };
+
+    slider.addEventListener('click', (event) => {
+      event.preventDefault();//сбрасываем знач. по умолч, заглушки #
+
+      let target = event.target;//цель события, на что нажимаем ~
+      console.log('target: ', target);
+
+      if (!target.matches('.portfolio-btn, .dot')) {//если кликаем не на эти элем. ничего не происходит
+        return;
+      }
+
+      prevSlide(slide, currentSlide, 'portfolio-item-active');
+      prevSlide(dot, currentSlide, 'dot-active');
+
+
+      if (target.matches('#arrow-right')) {//при нажатии на правую кнопку > slide
+        currentSlide++;
+      } else if (target.matches('#arrow-left')) {
+        currentSlide--;
+      } else if (target.matches('.dot')) {
+        dot.forEach((elem, index) => {//для сравнения точки и нажатого таргета
+          if (elem === target) {
+            currentSlide = index;//присваиваем акт. индекс слайду
+          }
+        });
+      }
+      if (currentSlide >= slide.length) {//начин. с начала
+        currentSlide = 0;
+      }
+      if (currentSlide < 0) {//возврат на предыдущий слайд
+        currentSlide = slide.length - 1;//длина массива > на 1, поэтому -1
+      }
+
+      nextSlide(slide, currentSlide, 'portfolio-item-active');
+      nextSlide(dot, currentSlide, 'dot-active');
+
+    });
+
+    slider.addEventListener('mouseover', (event) => {
+      if (event.target.matches('.portfolio-btn') || event.target.matches('.dot')) {
+        stopSlide();
+      }
+    });
+
+    slider.addEventListener('mouseout', (event) => {
+      if (event.target.matches('.portfolio-btn') || event.target.matches('.dot')) {
+        startSlide();
+      }
+    });
+
+    startSlide(10000);
+
+  };
+  slider();
 
 });
 
