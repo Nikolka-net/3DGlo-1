@@ -9,10 +9,19 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
       timerSeconds = document.querySelector('#timer-seconds');
 
     const getTimeRemaining = () => {
-      const addZero = (num) => {//добавляем нули
-        let str = num.toString();
-        return str.length == 1 ? "0" + str : str;
+
+      //альтернативная addZero
+      /*   const addZero = (num) => {//добавляем нули
+          let str = num.toString();
+          return str.length == 1 ? "0" + str : str;
+        }; */
+      const addZero = (num) => {
+        if (num < 10) {
+          num = `0${num}`;
+        }
+        return num;
       };
+
 
       let dateStop = new Date(deadline).getTime(),//дата окончания
         dateNow = new Date().getTime(),//текущая дата, миллисекунды
