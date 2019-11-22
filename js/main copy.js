@@ -187,21 +187,11 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
 
   const slider = () => {
     const slide = document.querySelectorAll('.portfolio-item'),
-      // dot = document.querySelectorAll('.dot'),
-      slider = document.querySelector('.portfolio-content'),
-      dots = document.querySelectorAll('.portfolio-dots');
+      dot = document.querySelectorAll('.dot'),
+      slider = document.querySelector('.portfolio-content');
 
-
-
-
-    let dot;
     let currentSlide = 0;//индекс текущего слайда
     let interval;//для идентификатора setInterval
-
-    dot = document.createElement('li');
-    dot.classList.add('dot', 'dot-active');
-    dots[0].appendChild(dot);
-
 
     const prevSlide = (elem, index, strClass) => {
       elem[index].classList.remove(strClass);//удаляем active
@@ -211,36 +201,19 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
       elem[index].classList.add(strClass);
     };
 
-
     const autoPlaySlide = () => {//автоматическое перелистывание
-
-      /* if (currentSlide <= slide.length) {
-        dot = dot.cloneNode();
-        dots[0].appendChild(dot);
-      } */
-      dot = dot.cloneNode();
-      dots[0].appendChild(dot);
-      let newDot = document.querySelectorAll('.dot');//коллекция "точек"
-      let dotLength2 = newDot.length;//длина псевдомассива
-
       prevSlide(slide, currentSlide, 'portfolio-item-active');//передаём значение и класс
-      prevSlide(newDot, currentSlide, 'dot-active');//передаём значение и класс, чтобы менялись точки, удал. класс
+      prevSlide(dot, currentSlide, 'dot-active');//передаём значение и класс, чтобы менялись точки
+
       currentSlide++;
-
       if (currentSlide >= slide.length) {//начин. с начала
-        if (dotLength2 > currentSlide) {//если длина псевдомассива >
-          for (let i = 0; i < currentSlide; i++) {
-            newDot[i].parentNode.removeChild(newDot[i]);//удал. элемент из коллекции
-          }
-        }
-        currentSlide = 0;//обнуляем
+        currentSlide = 0;
       }
-
-      nextSlide(slide, currentSlide, 'portfolio-item-active');//добавляем класс
-      nextSlide(newDot, currentSlide, 'dot-active');
+      nextSlide(slide, currentSlide, 'portfolio-item-active');
+      nextSlide(dot, currentSlide, 'dot-active');
     };
 
-    const startSlide = (time = 2000) => {//запуск слайда, по умолч. 3с
+    const startSlide = (time = 3000) => {//запуск слайда, по умолч. 3с
       interval = setInterval(autoPlaySlide, time);//запуск слайда через каждые 2с
     };
 
@@ -252,26 +225,18 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
     slider.addEventListener('click', (event) => {
       event.preventDefault();//сбрасываем знач. по умолч, заглушки #
 
-      dot = dot.cloneNode();
-      dots[0].appendChild(dot);
-      let newDot = document.querySelectorAll('.dot');//коллекция "точек"
-      //let dotLength2 = newDot.length;//длина псевдомассива
-
-
       let target = event.target;//цель события, на что нажимаем ~
-      console.log('target: ', target);
 
       if (!target.matches('.portfolio-btn, .dot')) {//если кликаем не на эти элем. ничего не происходит
         return;
       }
 
       prevSlide(slide, currentSlide, 'portfolio-item-active');
-      prevSlide(newDot, currentSlide, 'dot-active');
+      prevSlide(dot, currentSlide, 'dot-active');
 
 
       if (target.matches('#arrow-right')) {//при нажатии на правую кнопку > slide
         currentSlide++;
-
       } else if (target.matches('#arrow-left')) {
         currentSlide--;
       } else if (target.matches('.dot')) {
@@ -289,7 +254,7 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
       }
 
       nextSlide(slide, currentSlide, 'portfolio-item-active');
-      nextSlide(newDot, currentSlide, 'dot-active');
+      nextSlide(dot, currentSlide, 'dot-active');
 
     });
 
