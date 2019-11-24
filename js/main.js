@@ -362,5 +362,65 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
   };
   slider();
 
+  //Our team
+  const command = document.querySelector('#command');
+
+  command.addEventListener('mouseover', (event) => {//при наведении
+    let target = event.target;
+
+    if (target.matches('.command__photo')) {//если навели на этот элемент
+
+      //альтернативный код
+      //let attributeData = target.getAttribute('data-img');
+      //let attributeSrc = target.getAttribute('src');
+
+      let attributeData = target.dataset.img;
+      let attributeSrc = target.src;
+
+      target.dataset.img = attributeSrc;//присваиваем значения
+      target.src = attributeData;
+
+    }
+
+    if (!target.matches('.command__photo')) {//если кликаем не на эти элем. ничего не происходит
+      return;
+    }
+
+  });
+
+  command.addEventListener('mouseout', (event) => {//при уходе с элемента
+    let target = event.target;
+    if (target.matches('.command__photo')) {
+      let attributeData = target.getAttribute('data-img');
+      let attributeSrc = target.getAttribute('src');
+
+      target.dataset.img = attributeSrc;
+
+      target.src = attributeData;
+    }
+    if (!target.matches('.command__photo')) {//если кликаем не на эти элем. ничего не происходит
+      return;
+    }
+  });
+
+  //Calculator
+
+  const calcBlock = document.querySelector('.calc-block');
+
+  calcBlock.addEventListener('input', (event) => {
+    let target = event.target;
+
+    if (target.matches('.calc-square, .calc-count, .calc-day')) {
+      target.value = target.value.replace(/\D/g, '');//вводятся только цифры, остальные замен. на пустую строку
+
+    }
+    if (!target.matches('.calc-square, .calc-count, .calc-day')) {//если кликаем не на эти элем. ничего не происходит
+      return;
+    }
+
+  });
+
+
+
 });
 
