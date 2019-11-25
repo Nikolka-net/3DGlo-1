@@ -412,24 +412,6 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
 
   //Calculator
 
-
-  const calcBlock1 = document.querySelector('.calc-block');
-
-  calcBlock1.addEventListener('input', (event) => {
-    const target = event.target;
-
-    if (target.matches('.calc-square, .calc-count, .calc-day')) {
-      target.value = target.value.replace(/\D/g, '');//вводятся только цифры, остальные замен. на пустую строку
-
-    }
-    if (!target.matches('.calc-square, .calc-count, .calc-day')) {//если кликаем не на эти элем. ничего не происходит
-      return;
-    }
-
-  });
-
-  //Calculator от Максима
-
   const calc = (price = 100) => {//100 единиц - цена по умолчанию
     const calcBlock = document.querySelector('.calc-block'),
       calcType = document.querySelector('.calc-type'),
@@ -439,9 +421,9 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
       totalValue = document.getElementById('total');
 
     const countSum = () => {//считаем сумму
-      let total = 0,
-        countValue = 1,
-        dayValue = 1;
+      let total = 0,//начальная сумма в span
+        countValue = 1,//количество помещений изначально
+        dayValue = 1;//количество дней, начальное
 
       const typeValue = calcType.options[calcType.selectedIndex].value;//значение value у options
       const squareValue = +calcSquare.value;//получаем площадь в числах
@@ -457,11 +439,10 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
       }
 
       if (typeValue && squareValue) {//выводим сумму в span если они оба true,при использовании др. полей они будут false
-        total = price * typeValue * squareValue * countValue * dayValue;//считается и выводится
-      } 
+        total = Math.floor(price * typeValue * squareValue * countValue * dayValue);//считается и выводится
+      }
 
-
-      totalValue.textContent = total;
+      totalValue.textContent = total;//выводим сумму
     };
 
     calcBlock.addEventListener('change', (event) => {
@@ -483,14 +464,23 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
  
       }  */
 
-
       if (target.matches('.calc-type, .calc-square, .calc-day, .calc-count')) {
         countSum();
-
       }
 
     });
 
+    calcBlock.addEventListener('input', (event) => {
+      const target = event.target;
+      if (target.matches('.calc-square, .calc-count, .calc-day')) {
+        target.value = target.value.replace(/\D/g, '');//вводятся только цифры, остальные замен. на пустую строку
+      }
+
+      if (!target.matches('.calc-square, .calc-count, .calc-day')) {//если кликаем не на эти элем. ничего не происходит
+        return;
+      }
+
+    });
   };
 
   calc(100);
