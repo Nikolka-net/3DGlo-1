@@ -363,52 +363,60 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
   slider();
 
   //Our team
-  const command = document.querySelector('#command');
 
-  command.addEventListener('mouseover', (event) => {//при наведении
-    let target = event.target;
+  const team = () => {
 
-    if (target.matches('.command__photo')) {//если навели на этот элемент
+    const command = document.querySelector('#command');
 
-      //альтернативный код
-      //let attributeData = target.getAttribute('data-img');
-      //let attributeSrc = target.getAttribute('src');
+    command.addEventListener('mouseover', (event) => {//при наведении
+      const target = event.target;
 
-      let attributeData = target.dataset.img;
-      let attributeSrc = target.src;
+      if (target.matches('.command__photo')) {//если навели на этот элемент
 
-      target.dataset.img = attributeSrc;//присваиваем значения
-      target.src = attributeData;
+        //альтернативный код
+        //let attributeData = target.getAttribute('data-img');
+        //let attributeSrc = target.getAttribute('src');
 
-    }
+        let attributeData = target.dataset.img;
+        let attributeSrc = target.src;
 
-    if (!target.matches('.command__photo')) {//если кликаем не на эти элем. ничего не происходит
-      return;
-    }
+        target.dataset.img = attributeSrc;//присваиваем значения
+        target.src = attributeData;
 
-  });
+      }
 
-  command.addEventListener('mouseout', (event) => {//при уходе с элемента
-    let target = event.target;
-    if (target.matches('.command__photo')) {
-      let attributeData = target.getAttribute('data-img');
-      let attributeSrc = target.getAttribute('src');
+      if (!target.matches('.command__photo')) {//если кликаем не на эти элем. ничего не происходит
+        return;
+      }
 
-      target.dataset.img = attributeSrc;
+    });
 
-      target.src = attributeData;
-    }
-    if (!target.matches('.command__photo')) {//если кликаем не на эти элем. ничего не происходит
-      return;
-    }
-  });
+    command.addEventListener('mouseout', (event) => {//при уходе с элемента
+      const target = event.target;
+      if (target.matches('.command__photo')) {
+        let attributeData = target.getAttribute('data-img');
+        let attributeSrc = target.getAttribute('src');
+
+        target.dataset.img = attributeSrc;
+
+        target.src = attributeData;
+      }
+      if (!target.matches('.command__photo')) {//если кликаем не на эти элем. ничего не происходит
+        return;
+      }
+    });
+
+  };
+
+  team();
 
   //Calculator
 
-  const calcBlock = document.querySelector('.calc-block');
 
-  calcBlock.addEventListener('input', (event) => {
-    let target = event.target;
+  const calcBlock1 = document.querySelector('.calc-block');
+
+  calcBlock1.addEventListener('input', (event) => {
+    const target = event.target;
 
     if (target.matches('.calc-square, .calc-count, .calc-day')) {
       target.value = target.value.replace(/\D/g, '');//вводятся только цифры, остальные замен. на пустую строку
@@ -419,6 +427,73 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
     }
 
   });
+
+  //Calculator от Максима
+
+  const calc = (price = 100) => {//100 единиц - цена по умолчанию
+    const calcBlock = document.querySelector('.calc-block'),
+      calcType = document.querySelector('.calc-type'),
+      calcSquare = document.querySelector('.calc-square'),
+      calcDay = document.querySelector('.calc-day'),
+      calcCount = document.querySelector('.calc-count'),
+      totalValue = document.getElementById('total');
+
+    const countSum = () => {//считаем сумму
+      let total = 0,
+        countValue = 1,
+        dayValue = 1;
+
+      const typeValue = calcType.options[calcType.selectedIndex].value;//значение value у options
+      const squareValue = +calcSquare.value;//получаем площадь в числах
+
+      if (calcCount.value > 1) {
+        countValue += (calcCount.value - 1) / 10;//получ. десятую долю и её прибавляем;отнимаем 1, т.к. за 1 помещение 10-я часть не прибавляется
+      }
+
+      if (calcDay.value && calcDay.value < 5) {//если calcDay существует и < 5
+        dayValue *= 2;//* на 2, за скорость цена >
+      } else if (calcDay.value && calcDay.value < 10) {
+        dayValue *= 1.5;
+      }
+
+      if (typeValue && squareValue) {//выводим сумму в span если они оба true,при использовании др. полей они будут false
+        total = price * typeValue * squareValue * countValue * dayValue;//считается и выводится
+      } 
+
+
+      totalValue.textContent = total;
+    };
+
+    calcBlock.addEventListener('change', (event) => {
+      const target = event.target;
+
+      //альтернативный код
+      /*  if (target === calcType || target === calcSquare || target === calcDay ||
+        target === calcCount) {
+          console.log(1);
+        } */
+
+      /*  if (target.matches('select') || target.matches('input')) {
+        console.log(1);
+      }
+      */
+      /*  if (target.matches('.calc-type') || target.matches('.calc-square') ||
+        target.matches('.calc-day') || target.matches('.calc-count')) {
+        console.log(1);
+ 
+      }  */
+
+
+      if (target.matches('.calc-type, .calc-square, .calc-day, .calc-count')) {
+        countSum();
+
+      }
+
+    });
+
+  };
+
+  calc(100);
 
 
 
