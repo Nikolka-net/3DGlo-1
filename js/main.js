@@ -483,7 +483,7 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
     });
   };
 
-  calc(100);
+  calc();
 
 
 
