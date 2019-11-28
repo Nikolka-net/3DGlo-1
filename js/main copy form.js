@@ -493,18 +493,22 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
       successMessage = 'Спасибо! Мы скоро с вами свяжемся!';
 
     const form = document.getElementById('form1');
-    const form2 = document.getElementById('form2');
-    const form3 = document.getElementById('form3');
 
     const statusMessage = document.createElement('div');
-    statusMessage.style.cssText = `font-size: 2rem; color: #fff`;//применяем стили
+    statusMessage.style.cssText = 'font-size: 2rem';//применяем стили
 
-    const getForm = (event, form) => {
+    form.addEventListener('submit', (event) => {//при нажатии на кнопку срабатывает вся форма
       event.preventDefault();//чтобы страница не перезагружалась по умолчанию
       form.appendChild(statusMessage);
       statusMessage.textContent = loadMessage;//идёт загрузка
-      let formData = new FormData(form);//получ. данные нашей формы c атрибутом name в объект
+      const formData = new FormData(form);//получ. данные нашей формы c атрибутом name в объект
+
       let body = {};//объект, ко-й отправл. на сервер в формате json
+
+      //альтернативный код
+      /*  for (let val of formData.entries()) {//выводим данные из объекта
+         body[val[0]] = val[1];//добавляем в body
+       } */
 
       formData.forEach((val, key) => {
         body[key] = val;
@@ -519,88 +523,7 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
 
       });
 
-
-    };
-
-    const inputReset = (form) => {
-      for (const elem of form.elements) {//очистка инпутов
-        if (elem.tagName.toLowerCase() !== 'button' && elem.type !== 'button') {
-          elem.value = '';
-        }
-      }
-    };
-
-
-    /*    function valid(event) {
-      elementsForm.forEach(elem => {
-        const patternPhone = /\+?[78]([-()]*\d){10}/g;
-        const patternText = /^[\sА-ЯЁа-яё]*$/;
-        if (!elem.value) {//если инпуты пустые - выдел. красным
-          elem.style.border = 'solid red';
-          event.preventDefault();//кнопка отправить не активна
-        } else {
-          elem.style.border = '';//если ввели что-то в инпут подсветка красным исчезает
-        }
-        
-        if (elem.type === 'tel' && !patternPhone.test(elem.value)) {//если поле тел. не проходит валидацию
-          elem.style.border = 'solid red';
-          event.preventDefault();
-          
-        } else {
-          elem.style.border = '';
-        }
-        if (elem.type === 'text' && !patternText.test(elem.value) || elem.class === 'mess' && !patternText.test(elem.value)) {
-          elem.style.border = 'solid red';
-          event.preventDefault();
-        } else {
-          elem.style.border = '';
-        }
-        
-      });
-    } */
-
-    /*  for (const elem of form.elements) {//вытаскиваем из формы инпуты
-      if (elem.tagName.toLowerCase() !== 'button' && elem.type !== 'button') {
-        elementsForm.push(elem);//пушим в массив только наши инпуты
-      }
-    } */
-
-    //const elementsForm = [];//пустой массив для инпутов
-
-    /*  function valid2(event, form) {
-       const button = document.querySelector('button');
-       console.log('button: ', button);
- 
-       const patternPhone = /\+?[78]([-()]*\d){10}/g;
-       const patternText = /^[\sА-ЯЁа-яё]*$/;
-       for (const elem of form.elements) {//очистка инпутов
-         if (elem.tagName.toLowerCase() !== 'button' && elem.type !== 'button') {
-           if (elem.type === 'tel' && !patternPhone.test(elem.value)) {
-             elem.style.border = 'solid red';
-             event.preventDefault();
-             button.setAttribute.disabled = true;
-           }
-         }
-       }
- 
-     } */
-
-    form.addEventListener('submit', (event) => {
-      getForm(event, form);
-      inputReset(form);
     });
-
-    form2.addEventListener('submit', (event) => {
-      getForm(event, form2);
-      inputReset(form2);
-    });
-
-    form3.addEventListener('submit', (event) => {
-      getForm(event, form3);
-      inputReset(form3);
-    });
-
-
 
     const postData = (body, outputData, errorData) => {//ф. отправки запроса
       const request = new XMLHttpRequest();//объект request для обращения к серверу
