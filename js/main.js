@@ -495,6 +495,15 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
     const form = document.getElementById('form1');
     const form2 = document.getElementById('form2');
     const form3 = document.getElementById('form3');
+    const body = document.querySelector('body');
+
+
+    const inputCyrillic = () => {//ввод только кириллицы и пробелов
+      let target = event.target;
+      if (target.matches('.form-name') || target.matches('.mess') || target.matches('#form2-name')) {
+        target.value = target.value.replace(/[^а-яё\s]/ig, '');
+      }
+    };
 
     const statusMessage = document.createElement('div');
     statusMessage.style.cssText = `font-size: 2rem; color: #fff`;//применяем стили
@@ -516,10 +525,7 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
       }, (error) => {
         statusMessage.textContent = errorMessage;//ошибка
         console.error(error);
-
       });
-
-
     };
 
     const inputReset = (form) => {
@@ -530,74 +536,52 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
       }
     };
 
+    function valid(event, form) {
+      const elementsForm = [];//пустой массив для инпутов
+      const error = new Set();//массив для ошибочных инпутов, вмещает уникальные эл., не повторяются
 
-    /*    function valid(event) {
-      elementsForm.forEach(elem => {
-        const patternPhone = /\+?[78]([-()]*\d){10}/g;
-        const patternText = /^[\sА-ЯЁа-яё]*$/;
-        if (!elem.value) {//если инпуты пустые - выдел. красным
-          elem.style.border = 'solid red';
-          event.preventDefault();//кнопка отправить не активна
-        } else {
-          elem.style.border = '';//если ввели что-то в инпут подсветка красным исчезает
+      for (const elem of form.elements) {//вытаскиваем из формы инпуты
+        if (elem.tagName.toLowerCase() !== 'button' && elem.type !== 'button') {
+          elementsForm.push(elem);//пушим в массив только наши инпуты
         }
-        
-        if (elem.type === 'tel' && !patternPhone.test(elem.value)) {//если поле тел. не проходит валидацию
-          elem.style.border = 'solid red';
-          event.preventDefault();
-          
-        } else {
-          elem.style.border = '';
-        }
-        if (elem.type === 'text' && !patternText.test(elem.value) || elem.class === 'mess' && !patternText.test(elem.value)) {
-          elem.style.border = 'solid red';
-          event.preventDefault();
-        } else {
-          elem.style.border = '';
-        }
-        
-      });
-    } */
-
-    /*  for (const elem of form.elements) {//вытаскиваем из формы инпуты
-      if (elem.tagName.toLowerCase() !== 'button' && elem.type !== 'button') {
-        elementsForm.push(elem);//пушим в массив только наши инпуты
       }
-    } */
 
-    //const elementsForm = [];//пустой массив для инпутов
+      elementsForm.forEach(elem => {
+        const patternPhone = /^\+?[78]([-()]*\d){10}$/;
+        //const patternText = (/[^а-яё\s]/ig, '');
+        const patternEmail = /^[\w-]+@\w+\.\w{2,}$/;
 
-    /*  function valid2(event, form) {
-       const button = document.querySelector('button');
-       console.log('button: ', button);
- 
-       const patternPhone = /\+?[78]([-()]*\d){10}/g;
-       const patternText = /^[\sА-ЯЁа-яё]*$/;
-       for (const elem of form.elements) {//очистка инпутов
-         if (elem.tagName.toLowerCase() !== 'button' && elem.type !== 'button') {
-           if (elem.type === 'tel' && !patternPhone.test(elem.value)) {
-             elem.style.border = 'solid red';
-             event.preventDefault();
-             button.setAttribute.disabled = true;
-           }
-         }
-       }
- 
-     } */
+        if (elem.value.trim() === '' || elem.type === 'tel' && !patternPhone.test(elem.value) ||
+          elem.type === 'email' && !patternEmail.test(elem.value)) {//если не проходит валидацию
+          elem.style.border = 'solid red';
+          error.add(elem);//добавл. инпуты с ошибками в Set
+          event.preventDefault();
+        } else {
+          error.delete(elem);//удал. инпуты из Seta
+          elem.style.border = '';
+        }
+
+      });
+      if (!error.size) {//если size не содержит ошибки (в Set);size коли-во эл. в массиве Set
+        getForm(event, form);
+        inputReset(form);
+      }
+    }
+
+    body.addEventListener('input', (event) => {
+      inputCyrillic(event);
+    });
 
     form.addEventListener('submit', (event) => {
-      getForm(event, form);
-      inputReset(form);
+      valid(event, form);
     });
 
     form2.addEventListener('submit', (event) => {
-      getForm(event, form2);
-      inputReset(form2);
+      valid(event, form2);
     });
 
     form3.addEventListener('submit', (event) => {
-      getForm(event, form3);
-      inputReset(form3);
+      valid(event, form3);
     });
 
 
