@@ -529,6 +529,10 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
     };
 
     const inputReset = (form) => {
+      setTimeout(() => {//очистка сообщений
+        form.removeChild(statusMessage);
+        //statusMessage.textContent = '';
+      }, 3000);
       for (const elem of form.elements) {//очистка инпутов
         if (elem.tagName.toLowerCase() !== 'button' && elem.type !== 'button') {
           elem.value = '';
