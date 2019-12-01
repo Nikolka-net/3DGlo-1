@@ -519,13 +519,13 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
         body[key] = val;
       });
 
-      postData(body)
-        .then(statusMessage)
-        .then(statusMessage.textContent = errorMessage)
-        .catch(error => console.error(error));
+      postData(body, () => {//функция для отправки запроса, вкл. в себя 2 колбек функции по выводу сообщений для пользователя
+        statusMessage.textContent = successMessage;//при успешной отправке
 
-      console.log(1);
-
+      }, (error) => {
+        statusMessage.textContent = errorMessage;//ошибка
+        console.error(error);
+      });
     };
 
     const inputReset = (form) => {
@@ -553,7 +553,7 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
       elementsForm.forEach(elem => {
         const patternPhone = /^\+?[78]([-()]*\d){10}$/;
         //const patternText = (/[^а-яё\s]/ig, '');
-        const patternEmail = /^[\w-]+@\w+\.\w[{2,}\D]$/;
+        const patternEmail = /^[\w-]+@\w+\.\w{2,}$/;
 
         if (elem.value.trim() === '' || elem.type === 'tel' && !patternPhone.test(elem.value) ||
           elem.type === 'email' && !patternEmail.test(elem.value)) {//если не проходит валидацию
@@ -601,7 +601,8 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
             return;//выходим
           }
           if (request.status === 200) {//статус загрузки успешен
-            resolve(statusMessage.textContent = successMessage);
+            // outputData();//функция по оповещению пользователя
+            resolve();
           } else {
             reject(request.statusText);//функция, ко-я выдаёт ошибку
           }
