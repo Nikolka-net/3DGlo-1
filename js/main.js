@@ -495,7 +495,7 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
     const form = document.getElementById('form1');
     const form2 = document.getElementById('form2');
     const form3 = document.getElementById('form3');
-    const body = document.querySelector('body');
+    const bodyPage = document.querySelector('body');
 
 
     const inputCyrillic = () => {//ввод только кириллицы и пробелов
@@ -513,6 +513,7 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
       form.appendChild(statusMessage);
       statusMessage.textContent = loadMessage;//идёт загрузка
       let formData = new FormData(form);//получ. данные нашей формы c атрибутом name в объект
+
       let body = {};//объект, ко-й отправл. на сервер в формате json
 
       formData.forEach((val, key) => {
@@ -520,7 +521,10 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
       });
 
       postData(body)
-        .then(() => {
+        .then((response) => {//данные, ко-е мы получаем
+          if (response.status !== 200) {
+            throw new Error('status network not 200');//обрабатываем как ошибку через конструктор
+          }
           statusMessage.textContent = successMessage;
         })
         .catch((error) => {
@@ -574,7 +578,7 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
       }
     }
 
-    body.addEventListener('input', (event) => {
+    bodyPage.addEventListener('input', (event) => {
       inputCyrillic(event);
     });
 
@@ -593,30 +597,17 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
 
 
     const postData = (body) => {//ф. отправки запроса
-
-      return new Promise((resolve, reject) => {
-        const request = new XMLHttpRequest();//объект request для обращения к серверу
-
-        request.addEventListener('readystatechange', () => {//событие для пользователя о том, что данные ушли на сервер
-
-          if (request.readyState !== 4) {//не равен 4 событию
-            return;//выходим
-          }
-          if (request.status === 200) {//статус загрузки успешен
-            resolve();
-          } else {
-            reject(request.statusText);//функция, ко-я выдаёт ошибку
-          }
-        });
-
-        request.open('POST', './server.php');//отправляем запрос на сервер
-        request.setRequestHeader('Content-Type', 'application/json');//настройка заголовка: имя и значение(данные отпр. с формы form-data)
-        request.send(JSON.stringify(body));//отправляем эти данные на сервер в формате json строка
+      return fetch('./server.php', {//отправка запроса на сервер с по-ю промисов
+        method: 'POST',//отправляем и получаем
+        headers: {//заголовки
+          'Content-Type': 'application/json'//сообщаем серверу, что передаём json
+        },
+        body: JSON.stringify(body),//преобр. данные (~body) в json(строка) и передаём
+        credentials: 'include',//возможна проверка с по-ю cookie на сервере, передача учёт. записи; 'some-origin' - только в нашем домене, 'include' во всех    
+        cache: 'default' //лучше выставлять, т.к. в браузерах бывает по др.
       });
 
-
     };
-
 
   };
   sendForm();
