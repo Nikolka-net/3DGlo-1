@@ -520,11 +520,13 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
       });
 
       postData(body)
-        .then(statusMessage)
-        .then(statusMessage.textContent = errorMessage)
-        .catch(error => console.error(error));
-
-      console.log(1);
+        .then(() => {
+          statusMessage.textContent = successMessage;
+        })
+        .catch((error) => {
+          statusMessage.textContent = errorMessage;
+          console.error(error);
+        });
 
     };
 
@@ -553,7 +555,7 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
       elementsForm.forEach(elem => {
         const patternPhone = /^\+?[78]([-()]*\d){10}$/;
         //const patternText = (/[^а-яё\s]/ig, '');
-        const patternEmail = /^[\w-]+@\w+\.\w[{2,}\D]$/;
+        const patternEmail = /^[\w-]+@\w+\.\w{1,}\D$/;//после точки больше 1 символа, не цифры
 
         if (elem.value.trim() === '' || elem.type === 'tel' && !patternPhone.test(elem.value) ||
           elem.type === 'email' && !patternEmail.test(elem.value)) {//если не проходит валидацию
@@ -601,7 +603,7 @@ window.addEventListener('DOMContentLoaded', () => {//загрузка тольк
             return;//выходим
           }
           if (request.status === 200) {//статус загрузки успешен
-            resolve(statusMessage.textContent = successMessage);
+            resolve();
           } else {
             reject(request.statusText);//функция, ко-я выдаёт ошибку
           }
