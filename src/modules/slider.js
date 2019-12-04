@@ -8,6 +8,8 @@ const slider = () => {
   let currentSlide = 0;//индекс текущего слайда
   let interval;//для идентификатора setInterval
 
+
+
   dot = document.createElement('li');
   dot.classList.add('dot', 'dot-active');
   dots[0].appendChild(dot);
@@ -26,18 +28,23 @@ const slider = () => {
     dots[0].appendChild(dot);
   };
 
+  const dotLength = () => {
+    let dotLength = document.querySelectorAll('.dot').length;//длина псевдомассива 
+    return dotLength;
+  };
+
+
   const autoPlaySlide = () => {//автоматическое перелистывание
 
     cloneDot();
     let newDot = document.querySelectorAll('.dot');//коллекция "точек"
-    let dotLength = newDot.length;//длина псевдомассива
 
     prevSlide(slide, currentSlide, 'portfolio-item-active');//передаём значение и класс
     prevSlide(newDot, currentSlide, 'dot-active');//передаём значение и класс, чтобы менялись точки, удал. класс
     currentSlide++;
 
     if (currentSlide >= slide.length) {//начин. с начала
-      if (dotLength > currentSlide) {//если длина псевдомассива >
+      if (dotLength() > currentSlide) {//если длина псевдомассива >
         for (let i = 0; i < currentSlide; i++) {
           newDot[i].parentNode.removeChild(newDot[i]);//удал. элемент из коллекции
         }
@@ -84,6 +91,8 @@ const slider = () => {
       return;
     }
     let newDot = document.querySelectorAll('.dot');
+
+
     prevSlide(slide, currentSlide, 'portfolio-item-active');
     prevSlide(newDot, currentSlide, 'dot-active');
 
@@ -92,11 +101,8 @@ const slider = () => {
       currentSlide++;
       cloneDot();
 
-      newDot = document.querySelectorAll('.dot');//коллекция "точек"
-      let dotLength = newDot.length;//длина псевдомассива  
-
       if (currentSlide >= slide.length) {//начин. с начала
-        if (dotLength > currentSlide) {//если длина псевдомассива >
+        if (dotLength() > currentSlide) {//если длина псевдомассива >
           for (let i = 0; i < currentSlide; i++) {
             newDot[i].parentNode.removeChild(newDot[i]);//удал. элемент из коллекции
           }
@@ -107,9 +113,7 @@ const slider = () => {
 
     } else if (target.matches('#arrow-left')) {
 
-      newDot = document.querySelectorAll('.dot');//коллекция "точек"
-      let dotLength = newDot.length;//длина псевдомассива 
-      if (dotLength > currentSlide) {//если длина псевдомассива >
+      if (dotLength() > currentSlide) {//если длина псевдомассива >
         deletDots2();
         currentSlide--;
       }
@@ -119,11 +123,9 @@ const slider = () => {
         if (elem === target) {
           currentSlide = index;//присваиваем акт. индекс слайду
           if (currentSlide > 0) {
-            newDot = document.querySelectorAll('.dot');//коллекция "точек"
             deletDots();
 
           } else if (currentSlide === 0) {
-            newDot = document.querySelectorAll('.dot');//коллекция "точек"
             deletDots();
             startSlide();
           }
@@ -132,10 +134,7 @@ const slider = () => {
     }
 
     if (currentSlide >= slide.length) {//начин. с начала
-      newDot = document.querySelectorAll('.dot');//коллекция "точек"
-      let dotLength = newDot.length;//длина псевдомассива 
-
-      if (dotLength > currentSlide) {//если длина псевдомассива >
+      if (dotLength() > currentSlide) {//если длина псевдомассива >
         deletDots2();
       }
       currentSlide = 0;
@@ -143,8 +142,9 @@ const slider = () => {
 
     if (currentSlide < 0) {//возврат на предыдущий слайд
       currentSlide = slide.length - 1;//длина массива > на 1, поэтому -1
-      let newDot = document.querySelectorAll('.dot');
-      let dotLength = newDot.length;//длина псевдомассива 
+
+      let dotLength = document.querySelectorAll('.dot').length;
+
       if (dotLength < slide.length) {
         for (let i = 0; dotLength < slide.length; i++) {
           cloneDot();
