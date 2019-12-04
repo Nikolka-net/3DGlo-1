@@ -8,8 +8,6 @@ const slider = () => {
   let currentSlide = 0;//индекс текущего слайда
   let interval;//для идентификатора setInterval
 
-
-
   dot = document.createElement('li');
   dot.classList.add('dot', 'dot-active');
   dots[0].appendChild(dot);
