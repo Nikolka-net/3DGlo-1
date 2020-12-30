@@ -1,4 +1,4 @@
-# timer.js
+# 3DGlo-1
 ### This is the training project for js
 ### Первый учебный проект "3D Glo" из курса по JavaScript от
 ### [Glo Academy](https://vk.com/glo_academy). Проект включает в себя:
@@ -12,4 +12,4 @@
 ![Calculator](https://monosnap.com/image/Xz358Vc7lGmz9AYKm71KrD8se9sf1R)
 ![Form](https://monosnap.com/image/kgCcwV09Q6eNpHb009GjCTvV3SA2Pl)
 
-### Перейти на страницу проекта "3D Glo":  https://nikolka-net.github.io/timer.js/
+### Перейти на страницу проекта "3D Glo":  https://nikolka-net.github.io/3DGlo-1/
